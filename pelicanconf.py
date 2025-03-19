@@ -4,7 +4,7 @@ SITEURL = ""
 
 PATH = "content"
 
-TIMEZONE = 'Europe/Rome'
+TIMEZONE = 'Asia/Yerevan'
 
 DEFAULT_LANG = 'en'
 
@@ -29,7 +29,7 @@ SOCIAL = (
     ("Another social link", "#"),
 )
 
-DEFAULT_PAGINATION = 0
+DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
