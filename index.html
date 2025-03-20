@@ -648,8 +648,8 @@
             color: #3333ff; /* Blue for Art */
         }
 
-        .project-metadata .project-category:contains("Technology") {
-            color: #33cc33; /* Green for Technology */
+        .project-metadata .project-category:contains("Community & Events") {
+            color: #33cc33; /* Green for Community & Events */
         }
 
         /* Styling for performances and press sections */
@@ -864,7 +864,7 @@
         <span class="category-filter active" id="filter-all" onclick="filterProjects('all')">All</span>
         <span class="category-filter music" id="filter-music" onclick="filterProjects('category-music')">Music</span>
         <span class="category-filter art" id="filter-art" onclick="filterProjects('category-art')">Art</span>
-        <span class="category-filter tech" id="filter-tech" onclick="filterProjects('category-tech')">Technology</span>
+        <span class="category-filter tech" id="filter-tech" onclick="filterProjects('category-community')">Community & Events</span>
     </div>
 
     <div class="content-container">
@@ -941,7 +941,7 @@
                 sortDate: 2023,
                 category: 'Music',
                 categoryClass: 'category-music',
-                description: 'Kamunts blends dystopian electronic beats with post-punk energy, bringing dancefloor-driven chaos to clubs and festivals worldwide. Regular performances in Moscow\'s Mutabor, Paris\' Wanderlust, and live shows on Rinse France.',
+                description: 'Kamunts - Producer and DJ, known for her presence in the Armenian underground with the jrimurmur post-punk duo. She later became active in the Yerevan club scene, organizing events, DJing, and producing dancefloor-driven sounds inspired by dystopian tech and whatever future mess awaits. Passionate about dance, Kamunts pushes boundaries, unrestricted by genre, blending techno, experimental electronics, and unconventional dance styles.',
                 image: 'images/dj-kamunts.jpg',
                 links: [
                     { text: 'Resident Advisor', url: 'https://ra.co/dj/kamunts' },
@@ -1067,38 +1067,39 @@
                     }
                 ]
             },
-            'tamagotchi': {
-                title: 'Tamagotchi Installation',
-                year: '2018',
-                sortDate: 2018,
-                category: 'Art Installation',
-                categoryClass: 'category-art',
-                description: 'In this interactive performance at NPAK, I streamed myself as a Tamagotchi, controlled by gallery visitors. They pressed buttons to feed me, send me to the bathroom, or allow me to smoke.',
-                image: 'images/tamagotchi.jpg',
-                links: [
-                    { text: 'YouTube', url: 'https://www.youtube.com/watch?v=MXLlSkeuFC4&t=638s' }
-                ],
-                videoEmbed: 'MXLlSkeuFC4'
-            },
             'who-killed-giant': {
-                title: 'Who Killed the Giant?',
+                title: 'Happening 2016 NPAK',
                 year: '2016',
                 sortDate: 2016,
                 category: 'Art Installation',
                 categoryClass: 'category-art',
-                description: 'As part of an artistic happening at NPAK, I created a ritual of remembrance and resistance. Each night, I adorned the symbolic grave of the giant with flowers and a ribbon, subtly rewriting its history.',
+                description: `Artistic Happening: "Reviving the Giant"
+Event: "Who Killed the Giant" 2016, at NPAK
+Sevak Baghdasaryan, Arthur Sharoyan, Gevorg Grigoryan
+
+In response to the "Who Killed the Giant" exhibition, I engaged in a ritual of
+remembrance and hope. Each evening, I adorned the symbolic grave of the
+giant with flowers, attached to a ribbon bearing the word "hska," with the final
+part "ka" highlighted in red. This gesture, mingling mourning with a hint of
+resilience, transformed my contribution into a living dialogue about the
+enduring impact of legends in art. This was not a part of the original exhibition
+and I tried to remain anonymous in this endeavor.`,
                 image: 'images/giant.jpg',
+                additionalImages: [
+                    'images/giant-2.jpg',
+                    'images/giant-3.jpg'
+                ],
                 links: [
-                    { text: 'Exhibition Info', url: '#' }
+                    { text: 'Exhibition Info', url: 'https://www.accea.info/who-killed-the-giant/' }
                 ]
             },
             'medialab': {
-                title: 'Medialab Experiments',
-                year: '2017-2018',
-                sortDate: 2018,
+                title: '"A Clockwork Orange" Photogramm',
+                year: '2017',
+                sortDate: 2017,
                 category: 'Art Installation',
                 categoryClass: 'category-art',
-                description: 'Participated in Medialab\'s alternative art school program, working with experimental photography, interactive installations, and digital art techniques.',
+                description: '',
                 image: 'images/medialab.jpg',
                 links: [
                     { text: 'Medialab', url: '#' }
@@ -1108,8 +1109,8 @@
                 title: 'Projector Room',
                 year: '2019-2021',
                 sortDate: 2021,
-                category: 'Technology',
-                categoryClass: 'category-tech',
+                category: 'Community & Events',
+                categoryClass: 'category-community',
                 description: 'Co-founded Projector Room, a DIY space that blended electronic music, visual arts, and community engagement in post-Soviet architecture.',
                 image: 'images/projector.jpg',
                 links: [
@@ -1117,20 +1118,23 @@
                     { text: 'Instagram', url: '#' }
                 ]
             },
-            'new-project': {
-                title: 'New Project Title',
-                year: '2023',
-                sortDate: 2023,
-                category: 'Music',
-                categoryClass: 'category-music',
-                description: 'Description of the new project...',
-                image: 'images/new-project.jpg',
+            'tamagotchi': {
+                title: 'Tamagotchi installation at NPAK 2018',
+                year: '2018',
+                sortDate: 2018,
+                category: 'Art Installation',
+                categoryClass: 'category-art',
+                description: `A memory, a toy, a bond. Tamagotchi My Art is an installation about care, loss, and the blurred line between digital and emotional reality.
+
+As a child, I fed my Tamagotchi, kept it alive, felt its absence when it died. In Japan, some children ended their lives over the loss of their virtual pets. The solution? A reset button. Death, undone with a press.
+
+The installation mirrors this logic. Press a button, and a real call reaches me. A demand for care, a reversed connection—who is taking care of whom? The screen glitches, sounds distort, silence lingers. A digital presence, fragile yet persistent, refusing to be forgotten.
+
+What do we nurture? What do we lose? And when the virtual dies, does it leave something real behind?`,
+                image: 'images/tamagotchi-1.jpg',
                 additionalImages: [
-                    'images/new-project-2.jpg',
-                    'images/new-project-3.jpg'
-                ],
-                links: [
-                    { text: 'Project Website', url: 'https://project-website.com' }
+                    'images/tamagotchi-2.jpg',
+                    'images/tamagotchi-3.jpg'
                 ]
             }
         };
@@ -1328,7 +1332,7 @@
                     categoryColor = '#ff3333'; // Red
                 } else if (project.category === 'Art Installation') {
                     categoryColor = '#3333ff'; // Blue
-                } else if (project.category === 'Technology') {
+                } else if (project.category === 'Community & Events') {
                     categoryColor = '#33cc33'; // Green
                 }
                 
@@ -1507,20 +1511,20 @@
             // Toggle visibility of category filters based on selection
             const musicFilter = document.getElementById('filter-music');
             const artFilter = document.getElementById('filter-art');
-            const techFilter = document.getElementById('filter-tech');
+            const communityFilter = document.getElementById('filter-tech');
             
             if (category === 'all') {
                 // Hide category filters when "All" is selected
                 musicFilter.style.display = 'none';
                 artFilter.style.display = 'none';
-                techFilter.style.display = 'none';
+                communityFilter.style.display = 'none';
                 // Activate the "All" filter
                 document.getElementById('filter-all').classList.add('active');
             } else {
                 // Show all category filters when a specific category is selected
                 musicFilter.style.display = 'inline-block';
                 artFilter.style.display = 'inline-block';
-                techFilter.style.display = 'inline-block';
+                communityFilter.style.display = 'inline-block';
                 // Activate the selected filter
                 document.getElementById(`filter-${category.replace('category-', '')}`).classList.add('active');
             }
@@ -1556,6 +1560,22 @@
                 });
             }
         }
+
+        // Force immediate refresh to see changes
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Forcing refresh of content");
+            // Reload projects data
+            const scriptElement = document.createElement('script');
+            scriptElement.src = 'js/projects-data.js?v=' + new Date().getTime();
+            document.head.appendChild(scriptElement);
+            
+            // Re-initialize after a short delay
+            setTimeout(function() {
+                populateProjects();
+                showText();
+                filterProjects('category-art');
+            }, 500);
+        });
     </script>
 </body>
 </html>

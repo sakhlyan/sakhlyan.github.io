@@ -1,0 +1,41 @@
+:root {
+    --gray: rgb(169, 169, 169);
+    --sans: Helvetica, Arial, sans-serif;
+    --ms-0: 1.1rem;
+    --baseline: calc(var(--ms-0) * 1.25);
+    --blue: #1919ff;
+    --black: rgb(0, 0, 0);
+    --measure: 28em;
+    --music-color: #ff3333;
+    --art-color: #3333ff;
+    --tech-color: #33cc33;
+}
+
+/* ... all other CSS from the original file ... */
+
+/* Better mobile responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+    }
+    
+    .logo {
+        order: 1;
+        flex-basis: 70%;
+    }
+    
+    .nav-links {
+        order: 2;
+        flex-basis: 30%;
+        justify-content: flex-end;
+    }
+    
+    .category-filter {
+        order: 3;
+        margin-top: 10px;
+    }
+    
+    .project {
+        height: 50px; /* Smaller project tiles on mobile */
+    }
+} 
