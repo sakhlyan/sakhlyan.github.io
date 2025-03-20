@@ -68,8 +68,32 @@ const projects = {
             { text: 'Medialab Presentation', url: 'http://focus.org.am/wp-content/uploads/2018/10/Medialab-presentation_English.pdf' }
         ]
     },
+    'projector-room': {
+        title: 'Projector Room',
+        year: '2019-2021',
+        sortDate: 2021,
+        category: 'Community & Events',
+        categoryClass: 'category-community',
+        description: 'Co-founded Projector Room, a DIY space that blended electronic music, visual arts, and community engagement in post-Soviet architecture.',
+        image: 'images/projector.jpg',
+        links: [
+            { text: 'Resident Advisor', url: '#' },
+            { text: 'Instagram', url: '#' }
+        ]
+    },
     // ... all other project data from the original file ...
 }; 
 
 // Add this line to verify changes are working
 console.log("Projects data loaded successfully - version 1.0"); 
+
+// Update the filterProjects function
+function filterProjects(category) {
+    // When you click "Community & Events" in the filter, it should pass category-community
+    // But your code might be checking for category-tech
+    
+    // Make sure when filtering that:
+    if (textItem.classList.contains(category)) {
+        // This is checking if the project's categoryClass matches the filter
+    }
+} 
