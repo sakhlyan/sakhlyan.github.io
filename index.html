@@ -1392,10 +1392,9 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             });
         }
 
-        // Modify the initialization function to select Art by default
+        // Modified initialization to show text view by default with Art filter
         document.addEventListener('DOMContentLoaded', function() {
             populateProjects();
-            showText();
             
             // Simple event handlers
             document.getElementById('text-button').onclick = showText;
@@ -1405,7 +1404,10 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             document.getElementById('filter-art').onclick = function() { filterProjects('category-art'); };
             document.getElementById('filter-tech').onclick = function() { filterProjects('category-tech'); };
             
-            // Apply Art filter by default instead of showing all projects
+            // Show text view by default instead of grid view
+            showText();
+            
+            // Apply Art filter by default to highlight art projects in blue
             filterProjects('category-art');
         });
         
@@ -1435,11 +1437,18 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
 
         function toggleInfo() {
             const infoView = document.getElementById('info-view');
+            const modal = document.getElementById('project-modal');
+            
+            // If we're currently in a project view, return to home first
+            if (modal.style.display === 'block') {
+                closeProject();
+                return;
+            }
             
             // Check if we're currently in info view
             if (infoView.style.display === 'block') {
-                // Switching back to text view instead of grid view
-                showText(); // Changed from showGrid() to showText()
+                // Switching back to grid view
+                showGrid();
                 
                 // Restore filter visibility based on previous state
                 const allFilter = document.getElementById('filter-all');
@@ -1450,34 +1459,23 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                     document.getElementById('filter-music').style.display = 'inline-block';
                     document.getElementById('filter-art').style.display = 'inline-block';
                     document.getElementById('filter-tech').style.display = 'inline-block';
-                } else {
-                    // If "All" was active, keep others hidden
-                    document.getElementById('filter-music').style.display = 'none';
-                    document.getElementById('filter-art').style.display = 'none';
-                    document.getElementById('filter-tech').style.display = 'none';
                 }
             } else {
                 // Switching to info view
                 document.getElementById('grid-view').style.display = 'none';
                 document.getElementById('text-view').style.display = 'none';
-                document.getElementById('project-modal').style.display = 'none';
                 infoView.style.display = 'block';
                 
-                // Force hide ALL navigation elements including filters
-                document.getElementById('filter-all').style.removeProperty('display');
+                // Hide view switcher and filters
+                document.querySelector('.nav-links').style.display = 'none';
                 document.getElementById('filter-all').style.display = 'none';
-                document.getElementById('filter-music').style.removeProperty('display');
                 document.getElementById('filter-music').style.display = 'none';
-                document.getElementById('filter-art').style.removeProperty('display');
                 document.getElementById('filter-art').style.display = 'none';
-                document.getElementById('filter-tech').style.removeProperty('display');
                 document.getElementById('filter-tech').style.display = 'none';
                 
-                // Also hide the navigation buttons
-                document.querySelector('.nav-links').style.display = 'none';
-                
-                // Hide all info sections
-                hideAllSections();
+                // Show contact section by default
+                document.getElementById('contact-section').style.display = 'block';
+                document.querySelectorAll('.info-link')[0].classList.add('active');
             }
         }
 
@@ -1514,6 +1512,7 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             }
         }
 
+        // Simplified project open function without any browser history
         function openProject(projectId) {
             const modal = document.getElementById('project-modal');
             const projectDetails = document.getElementById('project-details');
@@ -1522,10 +1521,6 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             const project = projects[projectId];
             
             if (project) {
-                // Add history entry
-                const projectTitle = project.title.replace(/\s+/g, '-').toLowerCase();
-                history.pushState({projectId: projectId}, project.title, `#${projectTitle}`);
-                
                 // Hide all filters and view toggles, but keep the logo visible
                 document.querySelector('.nav-links').style.display = 'none';
                 document.getElementById('filter-all').style.display = 'none';
@@ -1699,62 +1694,34 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             }
         }
 
+        // Simple close project function without history manipulation
         function closeProject() {
             const modal = document.getElementById('project-modal');
             modal.style.display = 'none';
             
-            // Remove hash from URL when closing project
-            history.pushState("", document.title, window.location.pathname + window.location.search);
+            // Always return to the text view with art filter active
+            showText();
+            filterProjects('category-art');
             
-            // Always return to the grid view with all projects visible
-            showGrid();
-            filterProjects('all');
-            
-            // Make sure the grid button is active
-            document.getElementById('text-button').classList.remove('active');
-            document.getElementById('grid-button').classList.add('active');
+            // Make sure the text button is active
+            document.getElementById('text-button').classList.add('active');
+            document.getElementById('grid-button').classList.remove('active');
         }
 
-        // Handle the browser's back button
-        window.addEventListener('popstate', function(event) {
-            const modal = document.getElementById('project-modal');
+        // Simple project navigation with no history updates
+        function navigateProject(direction, currentId) {
+            const projectIds = Object.keys(projects);
+            const currentIndex = projectIds.indexOf(currentId);
             
-            if (window.location.hash) {
-                // If there's a hash in the URL, try to open the corresponding project
-                const projectId = findProjectIdByHash(window.location.hash.substring(1));
-                if (projectId) {
-                    openProject(projectId);
-                }
+            let newIndex;
+            if (direction === 'next') {
+                newIndex = (currentIndex + 1) % projectIds.length;
             } else {
-                // No hash, close the modal if it's open
-                if (modal.style.display === 'block') {
-                    modal.style.display = 'none';
-                    showGrid();
-                    filterProjects('all');
-                }
+                newIndex = (currentIndex - 1 + projectIds.length) % projectIds.length;
             }
-        });
-
-        // Helper function to find a project ID by URL hash
-        function findProjectIdByHash(hash) {
-            for (const [id, project] of Object.entries(projects)) {
-                const projectHash = project.title.replace(/\s+/g, '-').toLowerCase();
-                if (projectHash === hash) {
-                    return id;
-                }
-            }
-            return null;
+            
+            openProject(projectIds[newIndex]);
         }
-
-        // Check for hash in URL on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            if (window.location.hash) {
-                const projectId = findProjectIdByHash(window.location.hash.substring(1));
-                if (projectId) {
-                    setTimeout(() => openProject(projectId), 500);
-                }
-            }
-        });
 
         // Updated filter function to toggle visibility of category labels
         function filterProjects(category) {
