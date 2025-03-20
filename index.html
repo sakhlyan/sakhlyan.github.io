@@ -170,7 +170,7 @@
             position: relative;
             cursor: pointer;
             overflow: hidden;
-            height: 60px;
+            height: 100px; /* Changed from 80px to 100px */
             width: auto;
             flex-grow: 0;
             flex-shrink: 0;
@@ -181,7 +181,6 @@
             width: auto;
             object-fit: cover;
             display: block;
-            max-width: none;
         }
 
         /* Hide the category indicator dots */
@@ -264,6 +263,7 @@
             color: #33cc33 !important;
         }
 
+        /* Update comma styling to match project category colors on hover */
         .comma {
             display: inline;
             margin-right: 5px;
@@ -271,6 +271,41 @@
             font-weight: bold;
             font-family: var(--sans);
             font-size: var(--ms-0);
+            transition: color 0.2s;
+        }
+
+        /* When a text item is hovered, color the preceding comma */
+        .text-item:hover + .comma {
+            color: var(--black) !important;
+        }
+
+        .text-item.category-music:hover + .comma {
+            color: #ff3333 !important; /* Red for Music */
+        }
+
+        .text-item.category-art:hover + .comma {
+            color: #3333ff !important; /* Blue for Art */
+        }
+
+        .text-item.category-tech:hover + .comma {
+            color: #33cc33 !important; /* Green for Community & Events */
+        }
+
+        /* When a text item is hovered, also color the comma before it */
+        .comma:has(+ .text-item:hover) {
+            color: var(--black) !important;
+        }
+
+        .comma:has(+ .text-item.category-music:hover) {
+            color: #ff3333 !important; /* Red for Music */
+        }
+
+        .comma:has(+ .text-item.category-art:hover) {
+            color: #3333ff !important; /* Blue for Art */
+        }
+
+        .comma:has(+ .text-item.category-tech:hover) {
+            color: #33cc33 !important; /* Green for Community & Events */
         }
 
         /* Info Page - Aligned with navbar */
@@ -315,8 +350,9 @@
 
         /* Copyright text should remain gray */
         .copyright {
-            color: var(--gray);
-            font-weight: normal;
+            font-size: 0.8rem; /* Smaller text size */
+            margin-top: 50px; /* Add more space above the copyright */
+            color: var(--gray); /* Light gray color to be less prominent */
         }
 
         /* Social links - updated without icons and with inline layout */
@@ -841,6 +877,65 @@
                 height: 240px;
             }
         }
+
+        .tracks-section {
+            margin-top: 30px;
+        }
+
+        .tracks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .track-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .track-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .track-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .track-details {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .tracks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .performance-header {
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .performance-header h4 {
+            font-weight: bold;
+            color: var(--gray);
+            margin: 0;
+        }
+
+        .performance-note {
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .tracks-note {
+            margin-top: 20px;
+            font-style: italic;
+            color: var(--gray);
+        }
     </style>
 </head>
 <body>
@@ -896,11 +991,10 @@
             
             <p class="info-link" onclick="toggleSection('biography-section', this)">Biography</p>
             <div id="biography-section" class="info-section">
-                <p>Multidisciplinary artist, <strong>DJ, sound designer, and software engineer</strong>, blending technology, sound, and visual storytelling. With a background in mathematics, music production, and software development, I explore the intersection of <strong>experimental sound, interactive installations, and creative coding</strong>. Currently learning <strong>IoT technologies</strong>, integrating sensor-driven sound and real-time interactivity into my artistic practice.</p>
+                <p>Multidisciplinary artist, <strong>DJ, sound designer, and software engineer</strong>, blending technology, sound, and visuals. With a background in mathematics, music production, and software development, I explore the intersection of <strong>experimental sound, interactive installations, and creative coding</strong>. Currently learning <strong>IoT technologies</strong>, integrating sensor-driven sound and real-time interactivity into my artistic practice.</p>
                 
                 <p><strong>Education:</strong></p>
                 <p>- <strong>Mixing & Mastering</strong> – Catalyst Berlin</p>
-                <p>- <strong>Art Educational Program</strong> – Medialab</p>
                 <p>- <strong>Project-Based Learning</strong> – TUMO Labs</p>
                 <p>- <strong>Applied Mathematics</strong> – Yerevan State University</p>
                 
@@ -918,7 +1012,7 @@
                 <p>- <strong>Senior Software Engineer (PicsArt)</strong> – iOS development, feature optimization</p>
                 <p>- <strong>Sound Designer (Freelance)</strong> – Film, installations (<em>Recidive</em>, interactive performances)</p>
                 <p>- <strong>Co-Founder, Creative Director (Projector Room)</strong> – Music & art event curation</p>
-                <p>- <strong>Line-up Manager (The Office Club)</strong> – Curated artists and performances for club events</p>
+                <p>- <strong>Curator (The Office Club)</strong> – Curated artists and performances for club events</p>
             </div>
             
             <p class="copyright">All rights reserved 2025</p>
@@ -928,7 +1022,7 @@
     <!-- Project Modal -->
     <div id="project-modal" class="modal">
         <div class="modal-content">
-            <div id="project-details" class="project-details"></div>
+            <div id="project-details"></div>
         </div>
     </div>
 
@@ -936,17 +1030,85 @@
         // Project data
         const projects = {
             'dj-kamunts': {
-                title: 'DJ Kamunts',
+                title: 'Kamunts',
                 year: '2018-Present',
                 sortDate: 2023,
                 category: 'Music',
                 categoryClass: 'category-music',
-                description: 'Kamunts - Producer and DJ, known for her presence in the Armenian underground with the jrimurmur post-punk duo. She later became active in the Yerevan club scene, organizing events, DJing, and producing dancefloor-driven sounds inspired by dystopian tech and whatever future mess awaits. Passionate about dance, Kamunts pushes boundaries, unrestricted by genre, blending techno, experimental electronics, and unconventional dance styles.',
+                description: '',
                 image: 'images/dj-kamunts.jpg',
                 links: [
                     { text: 'Resident Advisor', url: 'https://ra.co/dj/kamunts' },
                     { text: 'SoundCloud', url: 'https://soundcloud.com/kamunts' },
                     { text: 'Bandcamp', url: 'https://kamunts.bandcamp.com' }
+                ],
+                tracks: [
+                    {
+                        title: 'Kyanqs կյանքս',
+                        year: 2024,
+                        label: 'UMAY (Berlin)',
+                        image: 'images/kyanqs.jpg',
+                        url: 'https://umay.bandcamp.com/track/kamunts-kyanqs'
+                    },
+                    {
+                        title: 'Shinra Tensei',
+                        year: 2023,
+                        label: 'Self-released',
+                        image: 'images/shinratensei.jpg',
+                        url: 'https://kamunts.bandcamp.com'
+                    },
+                    {
+                        title: 'Nedo',
+                        year: 2022,
+                        label: 'Self-released',
+                        image: 'images/nedotrack.jpg',
+                        url: 'https://kamunts.bandcamp.com'
+                    },
+                    {
+                        title: 'Phenibut',
+                        year: 2021,
+                        label: 'Self-released',
+                        image: 'images/phenibut.jpg',
+                        url: 'https://soundcloud.com/kamunts/kamunts-phenibut'
+                    }
+                ],
+                performances: [
+                    {
+                        header: "International Performances",
+                        year: 2024, 
+                        event: 'Upcoming Festival', 
+                        location: 'Berlin, Germany', 
+                        description: 'Scheduled to perform at Berlin electronic music festival'
+                    },
+                    {
+                        year: 2023, 
+                        event: 'Rinse France', 
+                        location: 'Paris, France', 
+                        description: 'Guest appearance and live broadcast on the influential Rinse France radio station'
+                    },
+                    {
+                        year: 2023, 
+                        event: 'Mutabor', 
+                        location: 'Moscow, Russia', 
+                        description: 'DJ set at one of Moscow\'s most important electronic music venues'
+                    },
+                    {
+                        year: 2022, 
+                        event: 'Wanderlust', 
+                        location: 'Paris, France', 
+                        description: 'Performance at iconic Parisian club featuring experimental electronic set'
+                    },
+                    {
+                        year: 2022, 
+                        event: '20ft Radio', 
+                        location: 'Kyiv, Ukraine', 
+                        description: 'Guest mix and interview on Ukraine\'s forward-thinking electronic music platform'
+                    },
+                    {
+                        header: "Local Performances",
+                        description: 'For a complete list of local performances, please check my Resident Advisor profile.',
+                        url: 'https://ra.co/dj/kamunts'
+                    }
                 ]
             },
             'jrimurmurner': {
@@ -1028,17 +1190,18 @@
             },
             'urvakan': {
                 title: 'URVAKAN Festival',
-                year: '2022',
+                year: '2019-2022',
                 sortDate: 2022,
                 category: 'Music',
                 categoryClass: 'category-music',
-                description: 'An international festival of contemporary culture and new musical forms, Urvakan (meaning "ghost" in Armenian) breathes life into abandoned spaces. With a bold mix of electronic, experimental, and club sounds, it transforms forgotten places into vibrant cultural hubs.',
-                image: 'images/urvakan.jpg',
+                description: 'URVAKAN Festival, an international experimental music event set in unusual Soviet modernist spaces across Yerevan',
+                image: 'images/urvakan.jpg?v=2',
                 additionalImages: [
-                    'images/urvakan-2.jpg'
+                    'images/urvakan-2.jpg',
+                    'images/urvakan-3.jpg'
                 ],
                 links: [
-                    { text: 'Resident Advisor', url: 'https://ra.co/events/1238031' }
+                    { text: 'URVAKAN Linktree', url: 'https://linktr.ee/urvakan?fbclid=PAZXh0bgNhZW0CMTEAAaZZlFWOGLkhAL6_e0Ybt5eJshP79mNOTi69J_UC-LXeSRFMeTipWzqlGNs_aem_0dAbaXymfGEANaOA6f2wTw' }
                 ]
             },
             'sound-design': {
@@ -1101,9 +1264,7 @@ and I tried to remain anonymous in this endeavor.`,
                 categoryClass: 'category-art',
                 description: '',
                 image: 'images/medialab.jpg',
-                links: [
-                    { text: 'Medialab', url: '#' }
-                ]
+                links: []
             },
             'projector-room': {
                 title: 'Projector Room',
@@ -1111,12 +1272,9 @@ and I tried to remain anonymous in this endeavor.`,
                 sortDate: 2021,
                 category: 'Community & Events',
                 categoryClass: 'category-tech',
-                description: 'Co-founded Projector Room, a DIY space that blended electronic music, visual arts, and community engagement in post-Soviet architecture.',
+                description: 'Co-founded Projector Room, a DIY arts and music space situated in a repurposed post-Soviet architectural setting in Yerevan. The venue evolved into a vital hub for the local experimental music scene, hosting a diverse range of events including electronic music nights, audiovisual performances, workshops, and community gatherings. As creative director, I curated the artistic programming, fostering connections between local and international artists while creating an inclusive environment for creative expression. Projector Room became known for its distinctive atmosphere, thoughtful curation, and commitment to nurturing emerging talent within Armenia\'s underground cultural landscape.',
                 image: 'images/projector.jpg',
-                links: [
-                    { text: 'Resident Advisor', url: '#' },
-                    { text: 'Instagram', url: '#' }
-                ]
+                links: []
             },
             'tamagotchi': {
                 title: 'Tamagotchi installation at NPAK 2018',
@@ -1135,29 +1293,65 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                 additionalImages: [
                     'images/tamagotchi-2.jpg',
                     'images/tamagotchi-3.jpg'
+                ],
+                videoEmbed: 'MXLlSkeuFC4'
+            },
+            'scanogram': {
+                title: 'Scanogram',
+                year: '2017',
+                sortDate: 2017,
+                category: 'Art Installation',
+                categoryClass: 'category-art',
+                description: '',
+                image: 'images/scanogram.jpg',
+                links: []
+            },
+            'refuge-worldwide': {
+                title: 'Refuge Worldwide Residency Berlin',
+                year: '2023',
+                sortDate: 2023,
+                category: 'Music',
+                categoryClass: 'category-music',
+                description: 'Creative residency program hosted by Refuge Worldwide Berlin, dedicated to guiding emerging artists through music production, artistic expression, and track refinement in a professional studio setting. During this residency, I participated in a radio show where I performed a live set featuring unreleased material and gave an in-depth interview about my musical approach and creative process.',
+                image: 'images/refuge-0.jpg?v=1',
+                additionalImages: [
+                    'images/refuge.jpg',
+                    'images/refuge-2.jpg?v=1',
+                    'images/refuge-3.jpg?v=1',
+                    'images/refuge-4.jpg?v=1'
+                ],
+                links: [
+                    { text: 'Refuge Worldwide', url: 'https://refugeworldwide.com/' }
                 ]
             }
         };
 
-        // Function to populate the grid with sorted projects
+        // Function to populate the grid with projects (sorted by date) and text view (randomized)
         function populateProjects() {
             const gridContainer = document.getElementById('grid-view');
             const textList = document.getElementById('text-list');
             
-            // Convert projects object to array for sorting
+            // Convert projects object to array
             const projectsArray = Object.entries(projects).map(([id, project]) => {
                 return { id, ...project };
             });
             
-            // Sort projects by date (newest first)
+            // Sort projects by date (newest first) for grid view
             projectsArray.sort((a, b) => b.sortDate - a.sortDate);
+            
+            // Create a randomized copy of the array for the text view
+            const randomizedArray = [...projectsArray];
+            for (let i = randomizedArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [randomizedArray[i], randomizedArray[j]] = [randomizedArray[j], randomizedArray[i]];
+            }
             
             // Clear existing content
             gridContainer.innerHTML = '';
             textList.innerHTML = '';
             
-            // Add projects to grid
-            projectsArray.forEach((project, index) => {
+            // Add projects to grid (sorted by date)
+            projectsArray.forEach((project) => {
                 // Create grid item
                 const gridItem = document.createElement('div');
                 gridItem.className = 'project';
@@ -1177,7 +1371,10 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                 
                 // Add to grid
                 gridContainer.appendChild(gridItem);
-                
+            });
+            
+            // Add projects to text list (randomized order)
+            randomizedArray.forEach((project, index) => {
                 // Add to text list with comma and category class
                 const textItem = document.createElement('span');
                 textItem.className = `text-item ${project.categoryClass}`;
@@ -1186,7 +1383,7 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                 textList.appendChild(textItem);
                 
                 // Add comma after each item (except the last one)
-                if (index < projectsArray.length - 1) {
+                if (index < randomizedArray.length - 1) {
                     const comma = document.createElement('span');
                     comma.className = 'comma';
                     comma.textContent = ',';
@@ -1195,16 +1392,22 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             });
         }
 
-        // Update the window.onload function to use Art as the default filter
-        window.onload = function() {
+        // Modify the initialization function to select Art by default
+        document.addEventListener('DOMContentLoaded', function() {
             populateProjects();
-            
-            // Show text view by default
             showText();
             
-            // Apply Art filter by default instead of "All"
+            // Simple event handlers
+            document.getElementById('text-button').onclick = showText;
+            document.getElementById('grid-button').onclick = showGrid;
+            document.getElementById('filter-all').onclick = function() { filterProjects('all'); };
+            document.getElementById('filter-music').onclick = function() { filterProjects('category-music'); };
+            document.getElementById('filter-art').onclick = function() { filterProjects('category-art'); };
+            document.getElementById('filter-tech').onclick = function() { filterProjects('category-tech'); };
+            
+            // Apply Art filter by default instead of showing all projects
             filterProjects('category-art');
-        };
+        });
         
         function showGrid() {
             document.getElementById('grid-view').style.display = 'flex';
@@ -1319,6 +1522,10 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             const project = projects[projectId];
             
             if (project) {
+                // Add history entry
+                const projectTitle = project.title.replace(/\s+/g, '-').toLowerCase();
+                history.pushState({projectId: projectId}, project.title, `#${projectTitle}`);
+                
                 // Hide all filters and view toggles, but keep the logo visible
                 document.querySelector('.nav-links').style.display = 'none';
                 document.getElementById('filter-all').style.display = 'none';
@@ -1384,7 +1591,7 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                                             <div class="release-details">
                                                 <strong>${release.title}</strong> - ${release.label}
                                                 <p>${release.description}</p>
-                                                ${release.url ? `<a href="${release.url}" target="_blank">Listen/Purchase</a>` : ''}
+                                                ${release.url ? `<a href="${release.url}" target="_blank">Listen</a>` : ''}
                                             </div>
                                         </li>
                                     `).join('')}
@@ -1415,12 +1622,13 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                                 <h3>Performances</h3>
                                 <ul class="performances-list">
                                     ${project.performances.map(perf => `
-                                        <li>
-                                            <div class="performance-year">${perf.year}</div>
+                                        ${perf.header ? `<li class="performance-header"><h4>${perf.header}</h4></li>` : ''}
+                                        <li ${!perf.year ? 'class="performance-note"' : ''}>
+                                            ${perf.year ? `<div class="performance-year">${perf.year}</div>` : ''}
                                             <div class="performance-details">
-                                                <strong>${perf.event}</strong>, ${perf.location}
+                                                ${perf.event ? `<strong>${perf.event}</strong>, ${perf.location}` : ''}
                                                 <p>${perf.description}</p>
-                                                ${perf.url ? `<a href="${perf.url}" target="_blank">Event details</a>` : ''}
+                                                ${perf.url ? `<a href="${perf.url}" target="_blank">${perf.event ? 'Event details' : 'More performances on Resident Advisor'}</a>` : ''}
                                             </div>
                                         </li>
                                     `).join('')}
@@ -1432,27 +1640,52 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                             <div class="press-section">
                                 <h3>Press</h3>
                                 <ul class="press-list">
-                                    ${project.press.map(article => `
+                                    ${project.press.map(press => `
                                         <li>
-                                            <div class="press-year">${article.year}</div>
+                                            <div class="press-year">${press.year}</div>
                                             <div class="press-details">
-                                                <strong>${article.publication}</strong>
-                                                ${article.title ? `<p>${article.title}</p>` : ''}
-                                                ${article.snippet ? `<p class="press-quote">${article.snippet}</p>` : ''}
-                                                ${article.url ? `<a href="${article.url}" target="_blank">Read article</a>` : ''}
+                                                <strong>${press.publication}</strong>
+                                                <p>${press.title}</p>
+                                                ${press.snippet ? `<p class="press-quote">${press.snippet}</p>` : ''}
+                                                ${press.url ? `<a href="${press.url}" target="_blank">Read more</a>` : ''}
                                             </div>
                                         </li>
                                     `).join('')}
                                 </ul>
                             </div>
                             ` : ''}
+                            
+                            ${project.tracks && project.tracks.length > 0 ? `
+                            <div class="tracks-section">
+                                <h3>Tracks</h3>
+                                <div class="tracks-grid">
+                                    ${project.tracks.map(track => `
+                                        <div class="track-item">
+                                            <div class="track-image">
+                                                <a href="${track.url}" target="_blank">
+                                                    <img src="${track.image}" alt="${track.title}">
+                                                </a>
+                                            </div>
+                                            <div class="track-details">
+                                                <strong>${track.title}</strong> (${track.year}) - ${track.label}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <p class="tracks-note">For more tracks, check my <a href="https://soundcloud.com/kamunts" target="_blank">SoundCloud</a> and <a href="https://kamunts.bandcamp.com" target="_blank">Bandcamp</a></p>
+                            </div>
+                            ` : ''}
+                            
+                            ${project.links && project.links.length > 0 && !project.tracks ? `
+                            <div class="project-links">
+                                ${project.links.map(link => {
+                                    // Change any "Purchase on" or similar text to just "Listen on"
+                                    const linkText = link.text.replace(/Purchase/g, "Listen");
+                                    return `<a href="${link.url}" target="_blank">${linkText}</a>`;
+                                }).join('')}
+                            </div>
+                            ` : ''}
                         </div>
-                        
-                        ${project.links && project.links.length > 0 ? `
-                        <div class="project-links">
-                            ${project.links.map(link => `<a href="${link.url}" target="_blank">${link.text}</a>`).join('')}
-                        </div>
-                        ` : ''}
                     </div>
                     
                     <div class="project-navigation">
@@ -1466,37 +1699,60 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
             }
         }
 
-        // Add project navigation function
-        function navigateProject(direction, currentId) {
-            const projectIds = Object.keys(projects);
-            const currentIndex = projectIds.indexOf(currentId);
-            
-            let newIndex;
-            if (direction === 'next') {
-                newIndex = (currentIndex + 1) % projectIds.length;
-            } else {
-                newIndex = (currentIndex - 1 + projectIds.length) % projectIds.length;
-            }
-            
-            openProject(projectIds[newIndex]);
-        }
-
         function closeProject() {
-            document.getElementById('project-modal').style.display = 'none';
+            const modal = document.getElementById('project-modal');
+            modal.style.display = 'none';
             
-            // Default to text view unless grid view was explicitly active
-            if (document.getElementById('grid-view').style.display === 'flex') {
-                showGrid();
-            } else {
-                showText();
-            }
+            // Remove hash from URL when closing project
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+            
+            // Always return to the grid view with all projects visible
+            showGrid();
+            filterProjects('all');
+            
+            // Make sure the grid button is active
+            document.getElementById('text-button').classList.remove('active');
+            document.getElementById('grid-button').classList.add('active');
         }
 
-        // Close modal if user clicks outside of it
-        window.addEventListener('click', function(event) {
+        // Handle the browser's back button
+        window.addEventListener('popstate', function(event) {
             const modal = document.getElementById('project-modal');
-            if (event.target === modal) {
-                closeProject();
+            
+            if (window.location.hash) {
+                // If there's a hash in the URL, try to open the corresponding project
+                const projectId = findProjectIdByHash(window.location.hash.substring(1));
+                if (projectId) {
+                    openProject(projectId);
+                }
+            } else {
+                // No hash, close the modal if it's open
+                if (modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    showGrid();
+                    filterProjects('all');
+                }
+            }
+        });
+
+        // Helper function to find a project ID by URL hash
+        function findProjectIdByHash(hash) {
+            for (const [id, project] of Object.entries(projects)) {
+                const projectHash = project.title.replace(/\s+/g, '-').toLowerCase();
+                if (projectHash === hash) {
+                    return id;
+                }
+            }
+            return null;
+        }
+
+        // Check for hash in URL on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.location.hash) {
+                const projectId = findProjectIdByHash(window.location.hash.substring(1));
+                if (projectId) {
+                    setTimeout(() => openProject(projectId), 500);
+                }
             }
         });
 
@@ -1560,22 +1816,6 @@ What do we nurture? What do we lose? And when the virtual dies, does it leave so
                 });
             }
         }
-
-        // Force immediate refresh to see changes
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("Forcing refresh of content");
-            // Reload projects data
-            const scriptElement = document.createElement('script');
-            scriptElement.src = 'js/projects-data.js?v=' + new Date().getTime();
-            document.head.appendChild(scriptElement);
-            
-            // Re-initialize after a short delay
-            setTimeout(function() {
-                populateProjects();
-                showText();
-                filterProjects('category-art');
-            }, 500);
-        });
     </script>
 </body>
 </html>

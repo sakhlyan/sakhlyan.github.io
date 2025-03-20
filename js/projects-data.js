@@ -65,7 +65,8 @@ const projects = {
         description: '',
         image: 'images/medialab.jpg',
         links: [
-            { text: 'Medialab Presentation', url: 'http://focus.org.am/wp-content/uploads/2018/10/Medialab-presentation_English.pdf' }
+            // Remove or replace the problematic link here
+            // { title: 'MediaLab Presentation', url: 'http://focus.org.am/wp-content/uploads/2018/10/Medialab-presentation_English.pdf' },
         ]
     },
     'projector-room': {
@@ -80,6 +81,16 @@ const projects = {
             { text: 'Resident Advisor', url: '#' },
             { text: 'Instagram', url: '#' }
         ]
+    },
+    'scanogram': {
+        title: 'Scanogram',
+        year: '2017',
+        sortDate: 2017,
+        category: 'Art Installation',
+        categoryClass: 'category-art',
+        description: '',
+        image: 'images/scanogram.jpg',
+        links: []
     },
     // ... all other project data from the original file ...
 }; 
